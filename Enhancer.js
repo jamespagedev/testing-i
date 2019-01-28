@@ -21,6 +21,11 @@ const enhancementLvls = [
   'PEN'
 ];
 
+const success = item => {
+  item.enhancement = item.enhancement + 1;
+  return item;
+};
+
 module.exports = {
-  enhancementLvls
+  success
 };

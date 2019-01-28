@@ -1,12 +1,8 @@
-const itemTypes = ['weapon', 'armor']; // add accessory, usable, pet, ect..., and/or change the name... but keep the order!
+const itemTypes = ['weapon', 'armor'];
 const weapons = require('./Weapons');
 const armors = require('./Armors');
 
-function getItemTypes() {
-  return itemTypes;
-}
-
-function createItem(itemType, itemName) {
+const createItem = (itemType, itemName) => {
   switch (itemType) {
     case itemTypes[0]:
       return weapons.list[itemName];
@@ -15,9 +11,8 @@ function createItem(itemType, itemName) {
     default:
       throw new Error(`Item Type ${itemType} not found`);
   }
-}
+};
 
 module.exports = {
-  getItemTypes,
   createItem
 };
