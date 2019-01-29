@@ -56,7 +56,6 @@ const success = item => {
     item.name = `[${item.enhancement}] ${item.origName}`;
   }
 
-  console.log(item);
   return item;
 };
 
@@ -113,9 +112,7 @@ const fail = item => {
 
   // armor
   if (item.type === itemTypes[1]) {
-    if (item.enhancement === armorSafeLvl) {
-      item.durability = Math.abs(item.durability - 5);
-    } else if (
+    if (
       // less than DUO
       enhancementLvls.indexOf(item.enhancement) <
       enhancementLvls.indexOf(enhancementLvls[17])
@@ -135,7 +132,17 @@ const fail = item => {
   return item;
 };
 
+const repair = item => {
+  if (item.durability === item.maxDurability) {
+    throw new Error(`No repair needed: ${item.name} is not damaged`);
+  }
+
+  item.durability = item.maxDurability;
+  return item;
+};
+
 module.exports = {
   success,
-  fail
+  fail,
+  repair
 };
