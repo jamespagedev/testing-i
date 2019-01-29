@@ -23,6 +23,7 @@ const enhancementLvls = [
 
 const success = item => {
   item.enhancement = item.enhancement + 1;
+  item.name = `[+${item.enhancement}] ${item.origName}`;
   return item;
 };
 
