@@ -50,7 +50,8 @@ const success = item => {
     item.name = `[+${item.enhancement}] ${item.origName}`;
   } else if (
     // less than 'PEN'
-    enhancementLvls.indexOf(item.enhancement) < enhancementLvls.indexOf('PEN')
+    enhancementLvls.indexOf(item.enhancement) <
+    enhancementLvls.indexOf(enhancementLvls[enhancementLvls.length - 1])
   ) {
     item.name = `[${item.enhancement}] ${item.origName}`;
   }
@@ -94,11 +95,15 @@ const fail = item => {
   // weapon
   if (item.type === itemTypes[0]) {
     if (
-      enhancementLvls.indexOf(item.enhancement) < enhancementLvls.indexOf('DUO')
+      // less than DUO
+      enhancementLvls.indexOf(item.enhancement) <
+      enhancementLvls.indexOf(enhancementLvls[17])
     ) {
       item.durability = Math.abs(item.durability - 5);
     } else if (
-      enhancementLvls.indexOf(item.enhancement) < enhancementLvls.indexOf('PEN')
+      // less than PEN
+      enhancementLvls.indexOf(item.enhancement) <
+      enhancementLvls.indexOf(enhancementLvls[enhancementLvls.length - 1])
     ) {
       item.enhancement =
         enhancementLvls[enhancementLvls.indexOf(item.durability) - 1];
@@ -111,11 +116,15 @@ const fail = item => {
     if (item.enhancement === armorSafeLvl) {
       item.durability = Math.abs(item.durability - 5);
     } else if (
-      enhancementLvls.indexOf(item.enhancement) < enhancementLvls.indexOf('DUO')
+      // less than DUO
+      enhancementLvls.indexOf(item.enhancement) <
+      enhancementLvls.indexOf(enhancementLvls[17])
     ) {
       item.durability = Math.abs(item.durability - 5);
     } else if (
-      enhancementLvls.indexOf(item.enhancement) < enhancementLvls.indexOf('PEN')
+      // less than PEN
+      enhancementLvls.indexOf(item.enhancement) <
+      enhancementLvls.indexOf(enhancementLvls[enhancementLvls.length - 1])
     ) {
       item.enhancement =
         enhancementLvls[enhancementLvls.indexOf(item.durability) - 1];
