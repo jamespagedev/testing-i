@@ -26,8 +26,18 @@ const armorSafeLvl = enhancementLvls[5];
 const weaponSafeLvl = enhancementLvls[7];
 
 const success = item => {
-  // Precondition1 - If the item's enhancement is 14 or lower, the item cannot be enhanced if the durability is below 25.
-  // Precondition2 - If the item's enhancement is 15 or higher, the item cannot be enhanced if the durability is below 10.
+  // Precondition1 - If the item's current enhancement is 15 or higher, item durability must be >= 10.
+  if (item.durability < 10) {
+    throw new Error('Item durability too low');
+  }
+  // Precondition2 - If the item's current enhancement is 14 or lower, item durability must be >= 25.
+  if (
+    item.durability < 25 &&
+    enhancementLvls.indexOf(item.enhancement) <
+      enhancementLvls.indexOf(enhancementLvls[15])
+  ) {
+    throw new Error('Item durability too low');
+  }
 
   if (item.enhancement !== enhancementLvls[enhancementLvls.length - 1]) {
     item.enhancement =
@@ -50,14 +60,40 @@ const success = item => {
 };
 
 const fail = item => {
-  // Precondition1 - If the item's current enhancement is 14 or lower, item durability must be >= 25.
-  // Precondition2 - If the item's current enhancement is 15 or higher, item durability must be >= 10.
+  // Precondition1 - If the item's current enhancement is 15 or higher, item durability must be >= 10.
+  if (item.durability < 10) {
+    throw new Error('Item durability too low');
+  }
+  // Precondition2 - If the item's current enhancement is 14 or lower, item durability must be >= 25.
+  if (
+    item.durability < 25 &&
+    enhancementLvls.indexOf(item.enhancement) <
+      enhancementLvls.indexOf(enhancementLvls[15])
+  ) {
+    throw new Error('Item durability too low');
+  }
+
+  // Precondition3 - If the weapon is less than +7... success should have been done.
+  if (
+    item.type === itemTypes[0] &&
+    enhancementLvls.indexOf(item.enhancement) <
+      enhancementLvls.indexOf(enhancementLvls[7])
+  ) {
+    return success(item);
+  }
+
+  // Precondition4 - If the armor is less than +5... success should have been done.
+  if (
+    item.type === itemTypes[0] &&
+    enhancementLvls.indexOf(item.enhancement) <
+      enhancementLvls.indexOf(enhancementLvls[5])
+  ) {
+    return success(item);
+  }
 
   // weapon
   if (item.type === itemTypes[0]) {
-    if (item.enhancement === weaponSafeLvl) {
-      item.durability = Math.abs(item.durability - 5);
-    } else if (
+    if (
       enhancementLvls.indexOf(item.enhancement) < enhancementLvls.indexOf('DUO')
     ) {
       item.durability = Math.abs(item.durability - 5);
