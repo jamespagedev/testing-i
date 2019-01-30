@@ -7,20 +7,21 @@ describe('enhancer basic test suite', () => {
     test('Item going +0 to +1 changes enhancement and adds detail to name', () => {
       // Setup
       const successWeapon1 = createItem('weapon', 'sword');
-      const expected = Object.assign({}, successWeapon1);
-      expected.enhancement = 1;
-      expected.name = `[+1] ${successWeapon1.origName}`;
+      const successExpected1 = Object.assign({}, successWeapon1);
+      successExpected1.enhancement = 1;
+      successExpected1.name = `[+1] ${successWeapon1.origName}`;
 
       // act - execute SUT (System Under Test)
       const result = enhancer.success(successWeapon1);
 
       // assert
-      expect(result).toEqual(expected);
+      expect(result).toEqual(successExpected1);
     });
   });
 
   describe('fail(item) test(s)', () => {
-    test('enhancing "[+3] item" will instead succeed, ', () => {
+    // Weapon Tests
+    test('enhancing "[+6] weapon" will instead succeed, ', () => {
       /* Note:
         I would just like to point out this fail method
         Should never be invoked if the weapon is below +7.
@@ -28,21 +29,21 @@ describe('enhancer basic test suite', () => {
         I see two options:
         1) Have the method invoke the success method.
         2) Throw an error saying this method should have never been reached.
-        ... I chose option 1.
+        ... I chose option 1 (and durability is not decreased).
       */
       // Setup
       const failWeapon1 = createItem('weapon', 'sword');
-      failWeapon1.enhancement = 3;
-      failWeapon1.name = '[+3] Sword';
-      const expected = Object.assign({}, failWeapon1);
-      expected.enhancement = 4;
-      expected.name = '[+4] Sword';
+      failWeapon1.enhancement = 6;
+      failWeapon1.name = '[+6] Sword';
+      const failExpected1 = Object.assign({}, failWeapon1);
+      failExpected1.enhancement = 7;
+      failExpected1.name = '[+7] Sword';
 
       // act - execute SUT (System Under Test)
       const result = enhancer.fail(failWeapon1);
 
       // assert
-      expect(result).toEqual(expected);
+      expect(result).toEqual(failExpected1);
     });
 
     test('enhancing "[+7] item" fail decrease durability by 5, ', () => {
@@ -50,14 +51,92 @@ describe('enhancer basic test suite', () => {
       const failWeapon2 = createItem('weapon', 'sword');
       failWeapon2.enhancement = 7;
       failWeapon2.name = '[+7] Sword';
-      const expected = Object.assign({}, failWeapon2);
-      expected.durability = 95;
+      const failExpected2 = Object.assign({}, failWeapon2);
+      failExpected2.durability = 95;
 
       // act - execute SUT (System Under Test)
       const result = enhancer.fail(failWeapon2);
 
       // assert
-      expect(result).toEqual(expected);
+      expect(result).toEqual(failExpected2);
+    });
+
+    test('enhancing "[+14] item" fail decrease durability by 5, ', () => {
+      // Setup
+      const failWeapon3 = createItem('weapon', 'sword');
+      failWeapon3.enhancement = 14;
+      failWeapon3.name = '[+14] Sword';
+      const failExpected3 = Object.assign({}, failWeapon3);
+      failExpected3.durability = 95;
+
+      // act - execute SUT (System Under Test)
+      const result = enhancer.fail(failWeapon3);
+
+      // assert
+      expect(result).toEqual(failExpected3);
+    });
+
+    test('enhancing "[+15] item" fail decrease durability by 10, ', () => {
+      // Setup
+      const failWeapon4 = createItem('weapon', 'sword');
+      failWeapon4.enhancement = 15;
+      failWeapon4.name = '[+15] Sword';
+      const failExpected4 = Object.assign({}, failWeapon4);
+      failExpected4.durability = 90;
+
+      // act - execute SUT (System Under Test)
+      const result = enhancer.fail(failWeapon4);
+
+      // assert
+      expect(result).toEqual(failExpected4);
+    });
+
+    test('enhancing "[PRI] item" fail decrease durability by 10, ', () => {
+      // Setup
+      const failWeapon5 = createItem('weapon', 'sword');
+      failWeapon5.enhancement = 'PRI';
+      failWeapon5.name = '[PRI] Sword';
+      const failExpected5 = Object.assign({}, failWeapon5);
+      failExpected5.durability = 90;
+
+      // act - execute SUT (System Under Test)
+      const result = enhancer.fail(failWeapon5);
+
+      // assert
+      expect(result).toEqual(failExpected5);
+    });
+
+    test('enhancing "[DUO] item" fail decrease durability by 10, and enchant lvl by 1 ', () => {
+      // Setup
+      const failWeapon6 = createItem('weapon', 'sword');
+      failWeapon6.enhancement = 'DUO';
+      failWeapon6.name = '[DUO] Sword';
+      const failExpected6 = Object.assign({}, failWeapon6);
+      failExpected6.durability = 90;
+      failExpected6.enhancement = 'PRI';
+      failExpected6.name = '[PRI] Sword';
+
+      // act - execute SUT (System Under Test)
+      const result = enhancer.fail(failWeapon6);
+
+      // assert
+      expect(result).toEqual(failExpected6);
+    });
+
+    test('enhancing "[PEN] item" fail do nothing?? ', () => {
+      // Setup
+      const failWeapon7 = createItem('weapon', 'sword');
+      failWeapon7.enhancement = 'PEN';
+      failWeapon7.name = '[PEN] Sword';
+      const failExpected7 = Object.assign({}, failWeapon7);
+      failExpected7.enhancement = 'PEN';
+      failExpected7.name = '[PEN] Sword';
+
+      // act - execute SUT (System Under Test)
+      const result = enhancer.fail(failWeapon7);
+
+      // assert
+      expect(result).toEqual(failExpected7);
     });
   });
 
@@ -66,31 +145,29 @@ describe('enhancer basic test suite', () => {
       // Setup
       const repairWeapon1 = createItem('weapon', 'sword');
       repairWeapon1.durability = 40;
-      const expected = Object.assign({}, repairWeapon1);
-      expected.durability = 100;
+      const repairExpected1 = Object.assign({}, repairWeapon1);
+      repairExpected1.durability = 100;
 
       // act - execute SUT (System Under Test)
       const result = enhancer.repair(repairWeapon1);
 
       // assert
-      expect(result).toEqual(expected);
+      expect(result).toEqual(repairExpected1);
     });
 
     test('item durability is already max: throws error', () => {
       // Setup
-      const repairWeapon1 = createItem('weapon', 'sword');
-      const expected = Object.assign({}, repairWeapon1);
-      expected.durability = 100;
+      const repairWeapon2 = createItem('weapon', 'sword');
 
       // act - execute SUT (System Under Test)
       /* Note: jest dosn't handle stored errors
         you MUST NOT store the error in a variable
         and then pass it in the expect() arg.
-        const result = enhancer.repair(repairWeapon1);
+        const result = enhancer.repair(repairWeapon2);
       */
 
       // assert
-      expect(() => enhancer.repair(repairWeapon1)).toThrow();
+      expect(() => enhancer.repair(repairWeapon2)).toThrow();
     });
   });
 });

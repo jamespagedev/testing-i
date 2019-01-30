@@ -91,28 +91,43 @@ const fail = item => {
     return success(item);
   }
 
+  // Precondition5 - if item enchangement is max ('PEN')... do nothing and return item??
+
   // weapon
   if (item.type === itemTypes[0]) {
     if (
+      // less than 15
+      enhancementLvls.indexOf(item.enhancement) <
+      enhancementLvls.indexOf(enhancementLvls[15])
+    ) {
+      item.durability = Math.abs(item.durability - 5);
+    } else if (
       // less than DUO
       enhancementLvls.indexOf(item.enhancement) <
       enhancementLvls.indexOf(enhancementLvls[17])
     ) {
-      item.durability = Math.abs(item.durability - 5);
+      item.durability = Math.abs(item.durability - 10);
     } else if (
       // less than PEN
       enhancementLvls.indexOf(item.enhancement) <
       enhancementLvls.indexOf(enhancementLvls[enhancementLvls.length - 1])
     ) {
       item.enhancement =
-        enhancementLvls[enhancementLvls.indexOf(item.durability) - 1];
+        enhancementLvls[enhancementLvls.indexOf(item.enhancement) - 1];
       item.durability = Math.abs(item.durability - 10);
+      item.name = `[${item.enhancement}] ${item.origName}`;
     }
   }
 
   // armor
   if (item.type === itemTypes[1]) {
     if (
+      // less than 15
+      enhancementLvls.indexOf(item.enhancement) <
+      enhancementLvls.indexOf(enhancementLvls[15])
+    ) {
+      item.durability = Math.abs(item.durability - 5);
+    } else if (
       // less than DUO
       enhancementLvls.indexOf(item.enhancement) <
       enhancementLvls.indexOf(enhancementLvls[17])
@@ -124,8 +139,9 @@ const fail = item => {
       enhancementLvls.indexOf(enhancementLvls[enhancementLvls.length - 1])
     ) {
       item.enhancement =
-        enhancementLvls[enhancementLvls.indexOf(item.durability) - 1];
+        enhancementLvls[enhancementLvls.indexOf(item.enhancement) - 1];
       item.durability = Math.abs(item.durability - 10);
+      item.name = `[${item.enhancement}] ${item.origName}`;
     }
   }
 
