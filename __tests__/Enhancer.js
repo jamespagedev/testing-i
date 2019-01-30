@@ -4,6 +4,7 @@ const enhancer = require('../Enhancer');
 // enhancer test suite
 describe('enhancer basic test suite', () => {
   describe('success(item) test(s)', () => {
+    // Weapon Tests
     test('Item going +0 to +1 changes enhancement and adds detail to name', () => {
       // Setup
       const successWeapon1 = createItem('weapon', 'sword');
@@ -16,6 +17,22 @@ describe('enhancer basic test suite', () => {
 
       // assert
       expect(result).toEqual(successExpected1);
+    });
+
+    test('Item going +15 to PRI changes enhancement and adds detail to name', () => {
+      // Setup
+      const successWeapon2 = createItem('weapon', 'sword');
+      successWeapon2.enhancement = 15;
+      successWeapon2.name = `[+15] ${successWeapon2.origName}`;
+      const successExpected2 = Object.assign({}, successWeapon2);
+      successExpected2.enhancement = 'PRI';
+      successExpected2.name = `[PRI] ${successWeapon2.origName}`;
+
+      // act - execute SUT (System Under Test)
+      const result = enhancer.success(successWeapon2);
+
+      // assert
+      expect(result).toEqual(successExpected2);
     });
   });
 
